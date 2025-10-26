@@ -6,7 +6,10 @@ const app = express();
 const projectRoutes = require("./projects");
 const taskRoutes = require('./routes/tasks');
 const usersRouter = require("./routes/users");
-app.use(cors());
+app.use(cors({
+  origin: process.env.FRONTEND_URL, // e.g. 'https://project-management-frontend.onrender.com'
+  credentials: true
+}));
 app.use("/api/users", usersRouter);
 app.use(express.json());
 app.use("/api/projects", projectRoutes);
