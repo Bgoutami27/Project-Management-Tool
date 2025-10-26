@@ -1,0 +1,81 @@
+/* Background gradient */
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: linear-gradient(120deg, #a2d2ff, #ffc8dd);
+}
+
+/* Main white card */
+.login-box {
+  display: flex;
+  width: 800px;
+  height: 500px;
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+/* Left side - form */
+.login-form-section {
+  flex: 1;
+  padding: 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.login-form-section h2 {
+  margin-bottom: 20px;
+  font-size: 28px;
+  color: #333;
+}
+
+.login-form-section form {
+  display: flex;
+  flex-direction: column;
+}
+
+.login-form-section input {
+  margin-bottom: 15px;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  font-size: 16px;
+}
+
+.login-form-section button {
+  background-color: #ffafcc;
+  color: white;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.3s;
+}
+
+.login-form-section button:hover {
+  background-color: #ff8fab;
+}
+
+.register-text {
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+/* Right side - image */
+.login-image-section {
+  flex: 1;
+  background-color: #f0f8ff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-illustration {
+  width: 80%;
+  max-width: 300px;
+}
