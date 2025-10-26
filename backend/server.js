@@ -4,7 +4,7 @@ const cors = require('cors');
 
 // Import route files
 const authRoutes = require('./routes/auth');
-const projectRoutes = require('./routes/projects');
+const projectRoutes = require("./projects");
 const taskRoutes = require('./routes/tasks');
 const usersRouter = require('./routes/users');
 
