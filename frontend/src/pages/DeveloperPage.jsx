@@ -19,7 +19,7 @@ function DeveloperPage() {
 
     const fetchTasks = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/tasks/developer", {
+        const res = await axios.get("https://project-management-tool-tuns.onrender.com/api/tasks/developer", {
           headers: { Authorization: `Bearer ${token}` },
         });
         setTasks(res.data);
@@ -40,7 +40,7 @@ function DeveloperPage() {
     const updatedTask = { ...taskToUpdate, status: newStatus };
 
     await axios.put(
-      `http://localhost:5000/api/tasks/${taskId}`,
+      `https://project-management-tool-tuns.onrender.com/api/tasks/${taskId}`,
       updatedTask,
       { headers: { Authorization: `Bearer ${token}` } }
     );
@@ -60,7 +60,7 @@ function DeveloperPage() {
 
     try {
       await axios.post(
-        `http://localhost:5000/api/tasks/${selectedTaskId}/comment`,
+        `https://project-management-tool-tuns.onrender.com/api/tasks/${selectedTaskId}/comment`,
         { comment },
         { headers: { Authorization: `Bearer ${token}` } }
       );
