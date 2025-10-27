@@ -19,9 +19,10 @@ function DeveloperPage() {
 
     const fetchTasks = async () => {
       try {
-        const res = await axios.get("https://project-management-tool-tuns.onrender.com/api/tasks/developer", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const res = await axios.get(
+          "https://project-management-tool-tuns.onrender.com/api/tasks/developer",
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
         setTasks(res.data);
       } catch (err) {
         console.error(err);
@@ -32,28 +33,25 @@ function DeveloperPage() {
   }, [token, navigate]);
 
   const handleStatusChange = async (taskId, newStatus) => {
-  try {
-    // Find the task in the state
-    const taskToUpdate = tasks.find(t => t.id === taskId);
-    if (!taskToUpdate) return;
+    try {
+      const taskToUpdate = tasks.find((t) => t.id === taskId);
+      if (!taskToUpdate) return;
 
-    const updatedTask = { ...taskToUpdate, status: newStatus };
+      const updatedTask = { ...taskToUpdate, status: newStatus };
 
-    await axios.put(
-      `https://project-management-tool-tuns.onrender.com/api/tasks/${taskId}`,
-      updatedTask,
-      { headers: { Authorization: `Bearer ${token}` } }
-    );
+      await axios.put(
+        `https://project-management-tool-tuns.onrender.com/api/tasks/${taskId}`,
+        updatedTask,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
 
-    // Update local state
-    setTasks(prev =>
-      prev.map(t => (t.id === taskId ? { ...t, status: newStatus } : t))
-    );
-  } catch (err) {
-    console.error("Failed to update status:", err);
-  }
-};
-
+      setTasks((prev) =>
+        prev.map((t) => (t.id === taskId ? { ...t, status: newStatus } : t))
+      );
+    } catch (err) {
+      console.error("Failed to update status:", err);
+    }
+  };
 
   const handleAddComment = async () => {
     if (!selectedTaskId || !comment) return;
@@ -80,43 +78,64 @@ function DeveloperPage() {
 
   // ---------- STYLES ----------
   const styles = {
+    page: {
+      minHeight: "100vh",
+      background: "linear-gradient(120deg, #3c1053, #ad5389)",
+      padding: "40px 20px",
+      fontFamily: "'Poppins', sans-serif",
+      color: "#333",
+    },
+    container: {
+      backgroundColor: "rgba(255, 255, 255, 0.9)",
+      borderRadius: "15px",
+      boxShadow: "0 10px 30px rgba(0, 0, 0, 0.2)",
+      padding: "30px",
+      maxWidth: "1100px",
+      margin: "auto",
+    },
     navbar: {
       display: "flex",
       justifyContent: "space-between",
       alignItems: "center",
-      padding: "15px 30px",
-      backgroundColor: "#2c3e50",
+      backgroundColor: "#3c1053",
       color: "white",
-      borderRadius: "8px",
-      marginBottom: "25px",
-      boxShadow: "0 2px 6px rgba(0,0,0,0.15)",
+      padding: "15px 30px",
+      borderRadius: "10px",
+      marginBottom: "30px",
+      boxShadow: "0 4px 10px rgba(0,0,0,0.15)",
     },
     navLink: {
-      marginRight: "15px",
       color: "white",
       textDecoration: "none",
-      fontWeight: "bold",
+      fontWeight: "600",
+      marginRight: "15px",
     },
     logoutBtn: {
-      padding: "6px 14px",
       backgroundColor: "#e74c3c",
       color: "white",
+      padding: "8px 15px",
       border: "none",
       borderRadius: "6px",
       cursor: "pointer",
       fontWeight: "600",
+      transition: "0.3s",
     },
-    tableWrapper: {
-      overflowX: "auto",
-      padding: "0 30px",
+    heading: {
+      color: "#3c1053",
+      textAlign: "center",
+      marginBottom: "25px",
+      fontSize: "24px",
+      fontWeight: "700",
     },
     table: {
       width: "100%",
       borderCollapse: "collapse",
-      marginTop: "20px",
+      borderRadius: "8px",
+      overflow: "hidden",
+      boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
     },
     th: {
-      backgroundColor: "#34495e",
+      backgroundColor: "#6a1b9a",
       color: "white",
       padding: "12px",
       textAlign: "left",
@@ -124,31 +143,38 @@ function DeveloperPage() {
     td: {
       padding: "10px",
       borderBottom: "1px solid #ddd",
+      backgroundColor: "#fff",
+    },
+    select: {
+      padding: "6px",
+      borderRadius: "5px",
+      border: "1px solid #ccc",
     },
     input: {
       padding: "6px",
-      width: "75%",
-      borderRadius: "4px",
+      borderRadius: "5px",
       border: "1px solid #ccc",
-      marginRight: "6px",
+      width: "70%",
+      marginRight: "8px",
     },
     addBtn: {
       padding: "6px 10px",
       backgroundColor: "#27ae60",
       color: "white",
       border: "none",
-      borderRadius: "4px",
+      borderRadius: "5px",
       cursor: "pointer",
     },
-    select: {
-      padding: "6px",
-      borderRadius: "4px",
-      border: "1px solid #ccc",
+    noTask: {
+      textAlign: "center",
+      fontSize: "16px",
+      color: "#555",
+      marginTop: "20px",
     },
   };
 
   return (
-    <div>
+    <div style={styles.page}>
       {/* Navbar */}
       <nav style={styles.navbar}>
         <h2>Developer Dashboard</h2>
@@ -162,11 +188,12 @@ function DeveloperPage() {
         </div>
       </nav>
 
-      {/* Task Section */}
-      <div style={styles.tableWrapper}>
-        <h3>Tasks Assigned to You</h3>
+      {/* Main Container */}
+      <div style={styles.container}>
+        <h3 style={styles.heading}>Tasks Assigned to You</h3>
+
         {tasks.length === 0 ? (
-          <p>No tasks assigned yet.</p>
+          <p style={styles.noTask}>No tasks assigned yet.</p>
         ) : (
           <table style={styles.table}>
             <thead>
@@ -186,7 +213,9 @@ function DeveloperPage() {
                     <select
                       style={styles.select}
                       value={task.status}
-                      onChange={(e) => handleStatusChange(task.id, e.target.value)}
+                      onChange={(e) =>
+                        handleStatusChange(task.id, e.target.value)
+                      }
                     >
                       <option value="Pending">Pending</option>
                       <option value="In Progress">In Progress</option>
