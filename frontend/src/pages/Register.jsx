@@ -20,7 +20,7 @@ function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await API.post("/api/auth/register", form);
+      const res = await API.post("/auth/register", form);
       alert(res.data.message);
       navigate('/login');
     } catch (err) {
