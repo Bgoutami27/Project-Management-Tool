@@ -39,7 +39,7 @@ function AdminPage() {
   };
 
   const deleteProject = async (id) => {
-    await axios.delete(`hhttps://project-management-tool-tuns.onrender.com/api/projects/${id}`);
+    await axios.delete(`https://project-management-tool-tuns.onrender.com/api/projects/${id}`);
     setProjects(projects.filter(p => p.id !== id));
   };
 
