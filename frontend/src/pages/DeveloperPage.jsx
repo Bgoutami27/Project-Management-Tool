@@ -175,9 +175,6 @@ function DeveloperPage() {
       <nav style={styles.navbar}>
         <h2>👨‍💻 Developer Dashboard</h2>
         <div>
-          <Link to="/developer" style={styles.navLink}>
-            Dashboard
-          </Link>
           <button style={styles.logoutBtn} onClick={handleLogout}>
             Logout
           </button>
