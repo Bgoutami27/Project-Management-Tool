@@ -14,68 +14,43 @@ function App() {
     setToken(localStorage.getItem("token"));
     setRole(localStorage.getItem("role"));
   }, []);
-
-  // 🎨 Apply gradient background to the whole page
-  useEffect(() => {
-    document.body.style.background =
-      "linear-gradient(135deg, #3c1053, #5f2c82, #8b5cf6)";
+useEffect(() => {
+    document.body.style.background = "linear-gradient(135deg, #e0c3fc, #8ec5fc)";
     document.body.style.minHeight = "100vh";
     document.body.style.margin = "0";
-    document.body.style.fontFamily = "'Poppins', sans-serif";
-    document.body.style.color = "#fff";
+    document.body.style.fontFamily = "Arial, sans-serif";
   }, []);
-
-  const containerStyle = {
-    maxWidth: "900px",
-    margin: "40px auto",
-    padding: "40px",
-    background: "rgba(255, 255, 255, 0.08)",
-    borderRadius: "16px",
-    boxShadow: "0 4px 25px rgba(0, 0, 0, 0.2)",
-    backdropFilter: "blur(10px)",
-    textAlign: "center",
-  };
-
-  const headerStyle = {
-    textAlign: "center",
-    color: "#fdfdfd",
-    fontSize: "2.8rem",
-    fontWeight: "700",
-    marginBottom: "10px",
-    textShadow: "2px 2px 6px rgba(0, 0, 0, 0.4)",
-  };
-
-  const subTextStyle = {
-    fontSize: "1.1rem",
-    color: "#e0d4ff",
-    marginBottom: "40px",
-    letterSpacing: "0.5px",
-  };
-
   return (
-    <div style={containerStyle}>
-      <h1 style={headerStyle}>🚀 Project Management App</h1>
-      <p style={subTextStyle}>
-        Organize projects, assign tasks, and collaborate efficiently.
-      </p>
+   <div style={{ padding: "20px" }}>
+      <h1
+        style={{
+          textAlign: "center",
+          color: "#3c1053", // Deep Purple
+          fontSize: "2.5rem",
+          marginBottom: "30px",
+          letterSpacing: "1px",
+          textShadow: "2px 2px 5px rgba(60, 16, 83, 0.3)",
+          fontWeight: "700",
+        }}
+      >
+        Project Management App
+      </h1>
+
 
       <Routes>
-        {/* Default route */}
+        {/* Default route redirects to login */}
         <Route path="/" element={<Navigate to="/login" />} />
 
-        {/* Authentication */}
+        {/* Auth routes */}
         <Route path="/register" element={<Register />} />
-        <Route
-          path="/login"
-          element={<Login setToken={setToken} setRole={setRole} />}
-        />
+        <Route path="/login" element={<Login setToken={setToken} setRole={setRole} />} />
 
-        {/* Role-based Pages */}
+        {/* Role-based pages */}
         <Route path="/admin" element={<AdminPage />} />
         <Route path="/pm" element={<PMPage />} />
         <Route path="/developer" element={<DeveloperPage />} />
 
-        {/* Fallback */}
+        {/* Fallback route */}
         <Route path="*" element={<Navigate to="/login" />} />
       </Routes>
     </div>
