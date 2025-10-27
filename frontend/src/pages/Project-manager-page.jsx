@@ -44,9 +44,10 @@ function ProjectManagerPage() {
   };
 
   const fetchUsers = async () => {
-    const res = await axios.get("https://project-management-tool-tuns.onrender.com/api/users");
-    setUsers(res.data);
-  };
+  const res = await axios.get("https://project-management-tool-tuns.onrender.com/api/users/developers");
+  setUsers(res.data);
+};
+
 
   useEffect(() => {
     fetchProjects();
