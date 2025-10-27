@@ -7,7 +7,6 @@ function DeveloperPage() {
   const [tasks, setTasks] = useState([]);
   const [comment, setComment] = useState("");
   const [selectedTaskId, setSelectedTaskId] = useState(null);
-
   const token = localStorage.getItem("token");
 
   // Fetch tasks assigned to developer
@@ -32,6 +31,7 @@ function DeveloperPage() {
     fetchTasks();
   }, [token, navigate]);
 
+  // Update task status
   const handleStatusChange = async (taskId, newStatus) => {
     try {
       const taskToUpdate = tasks.find((t) => t.id === taskId);
@@ -53,9 +53,9 @@ function DeveloperPage() {
     }
   };
 
+  // Add comment to task
   const handleAddComment = async () => {
     if (!selectedTaskId || !comment) return;
-
     try {
       await axios.post(
         `https://project-management-tool-tuns.onrender.com/api/tasks/${selectedTaskId}/comment`,
@@ -70,6 +70,7 @@ function DeveloperPage() {
     }
   };
 
+  // Logout
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("role");
@@ -89,11 +90,18 @@ function DeveloperPage() {
       justifyContent: "space-between",
       alignItems: "center",
       padding: "15px 30px",
-      backgroundColor: "#4b0082", // deep purple
+      backgroundColor: "#4b0082",
       color: "white",
       borderRadius: "10px",
       boxShadow: "0 6px 12px rgba(0,0,0,0.15)",
       marginBottom: "30px",
+    },
+    navLink: {
+      marginRight: "20px",
+      color: "white",
+      textDecoration: "none",
+      fontWeight: "600",
+      transition: "color 0.3s",
     },
     logoutBtn: {
       padding: "8px 16px",
@@ -105,6 +113,14 @@ function DeveloperPage() {
       fontWeight: "600",
       boxShadow: "0 3px 6px rgba(0,0,0,0.2)",
       transition: "background 0.3s",
+    },
+    card: {
+      backgroundColor: "#ffffffdd",
+      borderRadius: "15px",
+      padding: "25px",
+      boxShadow: "0 6px 15px rgba(0,0,0,0.1)",
+      margin: "0 auto",
+      maxWidth: "1000px",
     },
     table: {
       width: "100%",
@@ -157,18 +173,20 @@ function DeveloperPage() {
     <div style={styles.page}>
       {/* Navbar */}
       <nav style={styles.navbar}>
-        <h2>Developer Dashboard</h2>
+        <h2>👨‍💻 Developer Dashboard</h2>
         <div>
+          <Link to="/developer" style={styles.navLink}>
+            Dashboard
+          </Link>
           <button style={styles.logoutBtn} onClick={handleLogout}>
             Logout
           </button>
         </div>
       </nav>
 
-      {/* Main Container */}
-      <div style={styles.container}>
-        <h3>Tasks Assigned to You</h3>
-
+      {/* Task Section */}
+      <div style={styles.card}>
+        <h3 style={{ color: "#4b0082", marginBottom: "15px" }}>Tasks Assigned to You</h3>
         {tasks.length === 0 ? (
           <p>No tasks assigned yet.</p>
         ) : (
@@ -190,9 +208,7 @@ function DeveloperPage() {
                     <select
                       style={styles.select}
                       value={task.status}
-                      onChange={(e) =>
-                        handleStatusChange(task.id, e.target.value)
-                      }
+                      onChange={(e) => handleStatusChange(task.id, e.target.value)}
                     >
                       <option value="Pending">Pending</option>
                       <option value="In Progress">In Progress</option>
