@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 function DeveloperPage() {
@@ -96,13 +96,6 @@ function DeveloperPage() {
       boxShadow: "0 6px 12px rgba(0,0,0,0.15)",
       marginBottom: "30px",
     },
-    navLink: {
-      marginRight: "20px",
-      color: "white",
-      textDecoration: "none",
-      fontWeight: "600",
-      transition: "color 0.3s",
-    },
     logoutBtn: {
       padding: "8px 16px",
       backgroundColor: "#e74c3c",
@@ -174,16 +167,17 @@ function DeveloperPage() {
       {/* Navbar */}
       <nav style={styles.navbar}>
         <h2>👨‍💻 Developer Dashboard</h2>
-        <div>
-          <button style={styles.logoutBtn} onClick={handleLogout}>
-            Logout
-          </button>
-        </div>
+        <button style={styles.logoutBtn} onClick={handleLogout}>
+          Logout
+        </button>
       </nav>
 
       {/* Task Section */}
       <div style={styles.card}>
-        <h3 style={{ color: "#4b0082", marginBottom: "15px" }}>Tasks Assigned to You</h3>
+        <h3 style={{ color: "#4b0082", marginBottom: "15px" }}>
+          Tasks Assigned to You
+        </h3>
+
         {tasks.length === 0 ? (
           <p>No tasks assigned yet.</p>
         ) : (
@@ -191,6 +185,7 @@ function DeveloperPage() {
             <thead>
               <tr>
                 <th style={styles.th}>Task</th>
+                <th style={styles.th}>Deadline</th>
                 <th style={styles.th}>Status</th>
                 <th style={styles.th}>Update Status</th>
                 <th style={styles.th}>Add Comment</th>
@@ -200,18 +195,37 @@ function DeveloperPage() {
               {tasks.map((task) => (
                 <tr key={task.id}>
                   <td style={styles.td}>{task.title}</td>
+
+                  {/* ✅ Deadline column with red color if overdue */}
+                  <td
+                    style={{
+                      ...styles.td,
+                      color:
+                        new Date(task.deadline) < new Date() ? "red" : "#333",
+                      fontWeight: "500",
+                    }}
+                  >
+                    {task.deadline
+                      ? new Date(task.deadline).toLocaleDateString()
+                      : "—"}
+                  </td>
+
                   <td style={styles.td}>{task.status}</td>
+
                   <td style={styles.td}>
                     <select
                       style={styles.select}
                       value={task.status}
-                      onChange={(e) => handleStatusChange(task.id, e.target.value)}
+                      onChange={(e) =>
+                        handleStatusChange(task.id, e.target.value)
+                      }
                     >
                       <option value="Pending">Pending</option>
                       <option value="In Progress">In Progress</option>
                       <option value="Completed">Completed</option>
                     </select>
                   </td>
+
                   <td style={styles.td}>
                     <input
                       style={styles.input}
