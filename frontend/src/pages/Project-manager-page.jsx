@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import "./ProjectManager.css"; // ✅ new external CSS file
+import "./ProjectManager.css";
 
 function ProjectManagerPage() {
   const navigate = useNavigate();
@@ -15,12 +15,14 @@ function ProjectManagerPage() {
     status: "Pending",
     team: "",
   });
+
   const [taskForm, setTaskForm] = useState({
     title: "",
     description: "",
     status: "To Do",
     assignedTo: "",
     projectId: "",
+    deadline: "", // ✅ added
   });
 
   const [editingProjectId, setEditingProjectId] = useState(null);
@@ -32,7 +34,7 @@ function ProjectManagerPage() {
     navigate("/login");
   };
 
-  // Fetch projects, tasks, users
+  // ---- Fetch Data ----
   const fetchProjects = async () => {
     const res = await axios.get("https://project-management-tool-tuns.onrender.com/api/projects");
     setProjects(res.data);
@@ -44,10 +46,9 @@ function ProjectManagerPage() {
   };
 
   const fetchUsers = async () => {
-  const res = await axios.get("https://project-management-tool-tuns.onrender.com/api/users/developers");
-  setUsers(res.data);
-};
-
+    const res = await axios.get("https://project-management-tool-tuns.onrender.com/api/users/developers");
+    setUsers(res.data);
+  };
 
   useEffect(() => {
     fetchProjects();
@@ -55,7 +56,7 @@ function ProjectManagerPage() {
     fetchUsers();
   }, []);
 
-  // ---------------- Project Handlers ----------------
+  // ---- Project Handlers ----
   const handleProjectChange = (e) => {
     setProjectForm({ ...projectForm, [e.target.name]: e.target.value });
   };
@@ -90,7 +91,7 @@ function ProjectManagerPage() {
     fetchProjects();
   };
 
-  // ---------------- Task Handlers ----------------
+  // ---- Task Handlers ----
   const handleTaskChange = (e) => {
     setTaskForm({ ...taskForm, [e.target.name]: e.target.value });
   };
@@ -101,6 +102,7 @@ function ProjectManagerPage() {
       ...taskForm,
       assigned_to: taskForm.assignedTo,
       project_id: taskForm.projectId,
+      deadline: taskForm.deadline, // ✅ added
     };
     if (editingTaskId) {
       await axios.put(
@@ -117,6 +119,7 @@ function ProjectManagerPage() {
       status: "To Do",
       assignedTo: "",
       projectId: "",
+      deadline: "", // ✅ reset
     });
     fetchTasks();
   };
@@ -128,6 +131,7 @@ function ProjectManagerPage() {
       status: task.status,
       assignedTo: task.assigned_to || "",
       projectId: task.project_id || "",
+      deadline: task.deadline || "", // ✅ added
     });
     setEditingTaskId(task.id);
   };
@@ -198,9 +202,7 @@ function ProjectManagerPage() {
                   <strong>Team:</strong> {project.team}
                 </p>
                 <div className="pm-card-buttons">
-                  <button onClick={() => handleProjectEdit(project)}>
-                    Edit
-                  </button>
+                  <button onClick={() => handleProjectEdit(project)}>Edit</button>
                   <button
                     onClick={() => handleProjectDelete(project.id)}
                     className="delete-btn"
@@ -228,6 +230,14 @@ function ProjectManagerPage() {
               name="description"
               placeholder="Task Description"
               value={taskForm.description}
+              onChange={handleTaskChange}
+              required
+            />
+            {/* ✅ New Deadline Field */}
+            <input
+              type="date"
+              name="deadline"
+              value={taskForm.deadline}
               onChange={handleTaskChange}
               required
             />
@@ -279,6 +289,12 @@ function ProjectManagerPage() {
                 <p>{task.description}</p>
                 <p>
                   <strong>Status:</strong> {task.status}
+                </p>
+                <p>
+                  <strong>Deadline:</strong>{" "}
+                  {task.deadline
+                    ? new Date(task.deadline).toLocaleDateString()
+                    : "Not set"}
                 </p>
                 <p>
                   <strong>Project:</strong>{" "}
