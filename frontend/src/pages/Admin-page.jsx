@@ -11,12 +11,12 @@ function AdminPage() {
 
   // Fetch projects and tasks
   const fetchProjects = async () => {
-    const res = await axios.get("http://localhost:5000/api/projects");
+    const res = await axios.get("https://project-management-tool-tuns.onrender.com/api/projects");
     setProjects(res.data);
   };
 
   const fetchTasks = async () => {
-    const res = await axios.get("http://localhost:5000/api/tasks");
+    const res = await axios.get("https://project-management-tool-tuns.onrender.com/api/tasks");
     setTasks(res.data);
   };
 
@@ -33,18 +33,18 @@ function AdminPage() {
 
   // ----------- Project CRUD -----------
   const addProject = async () => {
-    const res = await axios.post("http://localhost:5000/api/projects", newProject);
+    const res = await axios.post("https://project-management-tool-tuns.onrender.com/api/projects", newProject);
     setProjects([...projects, res.data]);
     setNewProject({ name: "", description: "", status: "", team: "" });
   };
 
   const deleteProject = async (id) => {
-    await axios.delete(`http://localhost:5000/api/projects/${id}`);
+    await axios.delete(`hhttps://project-management-tool-tuns.onrender.com/api/projects/${id}`);
     setProjects(projects.filter(p => p.id !== id));
   };
 
   const updateProject = async (id, updatedProject) => {
-    const res = await axios.put(`http://localhost:5000/api/projects/${id}`, updatedProject);
+    const res = await axios.put(`https://project-management-tool-tuns.onrender.com/api/projects/${id}`, updatedProject);
     setProjects(projects.map(p => (p.id === id ? res.data : p)));
   };
 
