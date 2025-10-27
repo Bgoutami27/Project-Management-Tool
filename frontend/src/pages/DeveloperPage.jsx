@@ -77,7 +77,7 @@ function DeveloperPage() {
   };
 
   // ---------- STYLES ----------
- const styles = {
+  const styles = {
     page: {
       minHeight: "100vh",
       background: "linear-gradient(120deg, #a2d2ff, #cdb4db)",
@@ -95,13 +95,6 @@ function DeveloperPage() {
       boxShadow: "0 6px 12px rgba(0,0,0,0.15)",
       marginBottom: "30px",
     },
-    navLink: {
-      marginRight: "20px",
-      color: "white",
-      textDecoration: "none",
-      fontWeight: "600",
-      transition: "color 0.3s",
-    },
     logoutBtn: {
       padding: "8px 16px",
       backgroundColor: "#e74c3c",
@@ -112,14 +105,6 @@ function DeveloperPage() {
       fontWeight: "600",
       boxShadow: "0 3px 6px rgba(0,0,0,0.2)",
       transition: "background 0.3s",
-    },
-    card: {
-      backgroundColor: "#ffffffdd",
-      borderRadius: "15px",
-      padding: "25px",
-      boxShadow: "0 6px 15px rgba(0,0,0,0.1)",
-      margin: "0 auto",
-      maxWidth: "1000px",
     },
     table: {
       width: "100%",
@@ -174,9 +159,6 @@ function DeveloperPage() {
       <nav style={styles.navbar}>
         <h2>Developer Dashboard</h2>
         <div>
-          <Link to="/developer" style={styles.navLink}>
-            Dashboard
-          </Link>
           <button style={styles.logoutBtn} onClick={handleLogout}>
             Logout
           </button>
@@ -185,10 +167,10 @@ function DeveloperPage() {
 
       {/* Main Container */}
       <div style={styles.container}>
-        <h3 style={styles.heading}>Tasks Assigned to You</h3>
+        <h3>Tasks Assigned to You</h3>
 
         {tasks.length === 0 ? (
-          <p style={styles.noTask}>No tasks assigned yet.</p>
+          <p>No tasks assigned yet.</p>
         ) : (
           <table style={styles.table}>
             <thead>
