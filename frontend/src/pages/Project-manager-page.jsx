@@ -34,17 +34,17 @@ function ProjectManagerPage() {
 
   // Fetch projects, tasks, users
   const fetchProjects = async () => {
-    const res = await axios.get("http://localhost:5000/api/projects");
+    const res = await axios.get("https://project-management-tool-tuns.onrender.com/api/projects");
     setProjects(res.data);
   };
 
   const fetchTasks = async () => {
-    const res = await axios.get("http://localhost:5000/api/tasks");
+    const res = await axios.get("https://project-management-tool-tuns.onrender.com/api/tasks");
     setTasks(res.data);
   };
 
   const fetchUsers = async () => {
-    const res = await axios.get("http://localhost:5000/api/users");
+    const res = await axios.get("https://project-management-tool-tuns.onrender.com/api/users");
     setUsers(res.data);
   };
 
@@ -63,12 +63,12 @@ function ProjectManagerPage() {
     e.preventDefault();
     if (editingProjectId) {
       await axios.put(
-        `http://localhost:5000/api/projects/${editingProjectId}`,
+        `https://project-management-tool-tuns.onrender.com/api/projects/${editingProjectId}`,
         projectForm
       );
       setEditingProjectId(null);
     } else {
-      await axios.post("http://localhost:5000/api/projects", projectForm);
+      await axios.post("https://project-management-tool-tuns.onrender.com/api/projects", projectForm);
     }
     setProjectForm({
       name: "",
@@ -85,7 +85,7 @@ function ProjectManagerPage() {
   };
 
   const handleProjectDelete = async (id) => {
-    await axios.delete(`http://localhost:5000/api/projects/${id}`);
+    await axios.delete(`https://project-management-tool-tuns.onrender.com/api/projects/${id}`);
     fetchProjects();
   };
 
@@ -103,12 +103,12 @@ function ProjectManagerPage() {
     };
     if (editingTaskId) {
       await axios.put(
-        `http://localhost:5000/api/tasks/${editingTaskId}`,
+        `https://project-management-tool-tuns.onrender.com/api/tasks/${editingTaskId}`,
         payload
       );
       setEditingTaskId(null);
     } else {
-      await axios.post("http://localhost:5000/api/tasks", payload);
+      await axios.post("https://project-management-tool-tuns.onrender.com/api/tasks", payload);
     }
     setTaskForm({
       title: "",
@@ -132,7 +132,7 @@ function ProjectManagerPage() {
   };
 
   const handleTaskDelete = async (id) => {
-    await axios.delete(`http://localhost:5000/api/tasks/${id}`);
+    await axios.delete(`https://project-management-tool-tuns.onrender.com/api/tasks/${id}`);
     fetchTasks();
   };
 
