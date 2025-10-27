@@ -6,25 +6,14 @@ function AdminPage() {
   const navigate = useNavigate();
   const [projects, setProjects] = useState([]);
   const [tasks, setTasks] = useState([]);
-  const [users, setUsers] = useState([]); // ✅ for Project Managers list
   const [newProject, setNewProject] = useState({
     name: "",
     description: "",
+    status: "",
     team: "",
   });
 
-  const [taskForm, setTaskForm] = useState({
-    title: "",
-    description: "",
-    projectId: "",
-    assignedTo: "",
-    status: "To Do",
-    deadline: "",
-  });
-
-  const [editingTaskId, setEditingTaskId] = useState(null);
-
-  // ---------- Fetch data ----------
+  // Fetch data
   const fetchProjects = async () => {
     const res = await axios.get(
       "https://project-management-tool-tuns.onrender.com/api/projects"
@@ -39,17 +28,9 @@ function AdminPage() {
     setTasks(res.data);
   };
 
-  const fetchProjectManagers = async () => {
-    const res = await axios.get(
-      "https://project-management-tool-tuns.onrender.com/api/users/projectmanagers"
-    );
-    setUsers(res.data);
-  };
-
   useEffect(() => {
     fetchProjects();
     fetchTasks();
-    fetchProjectManagers();
   }, []);
 
   const handleLogout = () => {
@@ -58,14 +39,14 @@ function AdminPage() {
     navigate("/login");
   };
 
-  // ---------- Project CRUD ----------
+  // Project CRUD
   const addProject = async () => {
     const res = await axios.post(
       "https://project-management-tool-tuns.onrender.com/api/projects",
       newProject
     );
     setProjects([...projects, res.data]);
-    setNewProject({ name: "", description: "", team: "" });
+    setNewProject({ name: "", description: "", status: "", team: "" });
   };
 
   const deleteProject = async (id) => {
@@ -75,64 +56,18 @@ function AdminPage() {
     setProjects(projects.filter((p) => p.id !== id));
   };
 
-  // ---------- Task Handlers ----------
-  const handleTaskChange = (e) => {
-    setTaskForm({ ...taskForm, [e.target.name]: e.target.value });
-  };
+  // Task analytics
+  const taskCounts = tasks.reduce(
+    (acc, task) => {
+      acc[task.status] = (acc[task.status] || 0) + 1;
+      return acc;
+    },
+    {}
+  );
 
-  const handleTaskSubmit = async (e) => {
-    e.preventDefault();
-    const payload = {
-      title: taskForm.title,
-      description: taskForm.description,
-      status: taskForm.status,
-      project_id: taskForm.projectId,
-      assigned_to: taskForm.assignedTo,
-      deadline: taskForm.deadline,
-    };
-
-    if (editingTaskId) {
-      await axios.put(
-        `https://project-management-tool-tuns.onrender.com/api/tasks/${editingTaskId}`,
-        payload
-      );
-      setEditingTaskId(null);
-    } else {
-      await axios.post(
-        "https://project-management-tool-tuns.onrender.com/api/tasks",
-        payload
-      );
-    }
-
-    setTaskForm({
-      title: "",
-      description: "",
-      projectId: "",
-      assignedTo: "",
-      status: "To Do",
-      deadline: "",
-    });
-    fetchTasks();
-  };
-
-  const handleTaskEdit = (task) => {
-    setTaskForm({
-      title: task.title,
-      description: task.description,
-      status: task.status,
-      assignedTo: task.assigned_to || "",
-      projectId: task.project_id || "",
-      deadline: task.deadline || "",
-    });
-    setEditingTaskId(task.id);
-  };
-
-  const handleTaskDelete = async (id) => {
-    await axios.delete(
-      `https://project-management-tool-tuns.onrender.com/api/tasks/${id}`
-    );
-    fetchTasks();
-  };
+  const overdueTasks = tasks.filter(
+    (t) => t.due_date && new Date(t.due_date) < new Date() && t.status !== "Done"
+  );
 
   // ---------- Styles ----------
   const styles = {
@@ -163,12 +98,22 @@ function AdminPage() {
       fontWeight: "600",
       transition: "0.3s",
     },
+    logoutBtnHover: {
+      background: "#c0392b",
+    },
+    sectionTitle: {
+      fontSize: "24px",
+      fontWeight: "600",
+      color: "#4b0082",
+      marginBottom: "15px",
+    },
     card: {
       background: "rgba(255, 255, 255, 0.9)",
       borderRadius: "16px",
       padding: "25px",
       marginBottom: "30px",
       boxShadow: "0 6px 18px rgba(0,0,0,0.1)",
+      backdropFilter: "blur(10px)",
     },
     input: {
       width: "100%",
@@ -188,6 +133,25 @@ function AdminPage() {
       cursor: "pointer",
       transition: "0.3s",
     },
+    addBtnHover: {
+      background: "linear-gradient(135deg, #6043b4, #a05d85)",
+    },
+    projectList: {
+      listStyle: "none",
+      padding: "0",
+      marginTop: "15px",
+    },
+    projectItem: {
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+      backgroundColor: "#f3eaff",
+      padding: "12px 16px",
+      borderRadius: "12px",
+      marginBottom: "10px",
+      fontSize: "15px",
+      boxShadow: "0 3px 8px rgba(0,0,0,0.05)",
+    },
     deleteBtn: {
       background: "#ff4b4b",
       color: "white",
@@ -197,6 +161,25 @@ function AdminPage() {
       cursor: "pointer",
       fontWeight: "600",
       transition: "0.3s",
+    },
+    statsCard: {
+      background: "#ffffffee",
+      borderRadius: "15px",
+      padding: "20px",
+      boxShadow: "0 6px 15px rgba(0,0,0,0.08)",
+      display: "grid",
+      gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))",
+      gap: "20px",
+      marginBottom: "20px",
+    },
+    statBox: {
+      background: "linear-gradient(135deg, #a06cd5, #b892ff)",
+      color: "white",
+      borderRadius: "10px",
+      padding: "20px",
+      textAlign: "center",
+      fontWeight: "600",
+      boxShadow: "0 4px 10px rgba(0,0,0,0.15)",
     },
   };
 
@@ -210,9 +193,9 @@ function AdminPage() {
         </button>
       </nav>
 
-      {/* ---------- PROJECT MANAGEMENT ---------- */}
+      {/* Project Section */}
       <div style={styles.card}>
-        <h3>📁 Project Management</h3>
+        <h3 style={styles.sectionTitle}>📁 Project Management</h3>
         <input
           style={styles.input}
           placeholder="Project Name"
@@ -231,6 +214,14 @@ function AdminPage() {
         />
         <input
           style={styles.input}
+          placeholder="Status"
+          value={newProject.status}
+          onChange={(e) =>
+            setNewProject({ ...newProject, status: e.target.value })
+          }
+        />
+        <input
+          style={styles.input}
           placeholder="Team"
           value={newProject.team}
           onChange={(e) =>
@@ -240,10 +231,13 @@ function AdminPage() {
         <button style={styles.addBtn} onClick={addProject}>
           ➕ Add Project
         </button>
-        <ul>
+
+        <ul style={styles.projectList}>
           {projects.map((p) => (
-            <li key={p.id}>
-              {p.name} — {p.team}{" "}
+            <li key={p.id} style={styles.projectItem}>
+              <span>
+                <strong>{p.name}</strong> — {p.status} — Team: {p.team}
+              </span>
               <button
                 style={styles.deleteBtn}
                 onClick={() => deleteProject(p.id)}
@@ -255,99 +249,30 @@ function AdminPage() {
         </ul>
       </div>
 
-      {/* ---------- TASK ASSIGNMENT TO PROJECT MANAGERS ---------- */}
+      {/* Task Summary */}
       <div style={styles.card}>
-        <h3>🧾 Assign Tasks to Project Managers</h3>
-        <form onSubmit={handleTaskSubmit}>
-          <input
-            style={styles.input}
-            placeholder="Task Title"
-            name="title"
-            value={taskForm.title}
-            onChange={handleTaskChange}
-            required
-          />
-          <input
-            style={styles.input}
-            placeholder="Task Description"
-            name="description"
-            value={taskForm.description}
-            onChange={handleTaskChange}
-            required
-          />
-          <input
-            style={styles.input}
-            type="date"
-            name="deadline"
-            value={taskForm.deadline}
-            onChange={handleTaskChange}
-            required
-          />
-          <select
-            style={styles.input}
-            name="projectId"
-            value={taskForm.projectId}
-            onChange={handleTaskChange}
-            required
-          >
-            <option value="">Select Project</option>
-            {projects.map((p) => (
-              <option key={p.id} value={p.id}>
-                {p.name}
-              </option>
-            ))}
-          </select>
-          <select
-            style={styles.input}
-            name="assignedTo"
-            value={taskForm.assignedTo}
-            onChange={handleTaskChange}
-            required
-          >
-            <option value="">Assign to Project Manager</option>
-            {users.map((u) => (
-              <option key={u.id} value={u.id}>
-                {u.name}
-              </option>
-            ))}
-          </select>
-          <select
-            style={styles.input}
-            name="status"
-            value={taskForm.status}
-            onChange={handleTaskChange}
-          >
-            <option>To Do</option>
-            <option>In Progress</option>
-            <option>Done</option>
-          </select>
-          <button style={styles.addBtn} type="submit">
-            {editingTaskId ? "Update Task" : "Add Task"}
-          </button>
-        </form>
-
-        <h3>📋 Existing Tasks</h3>
-        {tasks.map((t) => (
-          <div key={t.id}>
-            <strong>{t.title}</strong> — {t.status} |{" "}
-            {users.find((u) => u.id === t.assigned_to)?.name || "-"} |{" "}
-            {t.deadline
-              ? new Date(t.deadline).toLocaleDateString()
-              : "No deadline"}
-            <button
-              style={styles.deleteBtn}
-              onClick={() => handleTaskDelete(t.id)}
-            >
-              Delete
-            </button>
-            <button
-              style={styles.addBtn}
-              onClick={() => handleTaskEdit(t)}
-            >
-              Edit
-            </button>
+        <h3 style={styles.sectionTitle}>📊 Task Summary</h3>
+        <div style={styles.statsCard}>
+          <div style={styles.statBox}>To Do: {taskCounts["To Do"] || 0}</div>
+          <div style={styles.statBox}>
+            In Progress: {taskCounts["In Progress"] || 0}
           </div>
-        ))}
+          <div style={styles.statBox}>Done: {taskCounts["Done"] || 0}</div>
+          <div style={styles.statBox}>Overdue: {overdueTasks.length}</div>
+        </div>
+
+        <h3 style={styles.sectionTitle}>🧾 Task List</h3>
+        <ul style={styles.projectList}>
+          {tasks.map((t) => (
+            <li key={t.id} style={styles.projectItem}>
+              <span>
+                <strong>{t.title}</strong> — {t.status}{" "}
+                {t.assigned_user && `| 👤 ${t.assigned_user}`}{" "}
+                {t.due_date && `| 📅 ${new Date(t.due_date).toLocaleDateString()}`}
+              </span>
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
   );
