@@ -9,7 +9,6 @@ function AdminPage() {
   const [newProject, setNewProject] = useState({
     name: "",
     description: "",
-    status: "",
     team: "",
   });
 
@@ -46,7 +45,7 @@ function AdminPage() {
       newProject
     );
     setProjects([...projects, res.data]);
-    setNewProject({ name: "", description: "", status: "", team: "" });
+    setNewProject({ name: "", description: "", team: "" });
   };
 
   const deleteProject = async (id) => {
@@ -98,9 +97,6 @@ function AdminPage() {
       fontWeight: "600",
       transition: "0.3s",
     },
-    logoutBtnHover: {
-      background: "#c0392b",
-    },
     sectionTitle: {
       fontSize: "24px",
       fontWeight: "600",
@@ -132,9 +128,6 @@ function AdminPage() {
       fontWeight: "bold",
       cursor: "pointer",
       transition: "0.3s",
-    },
-    addBtnHover: {
-      background: "linear-gradient(135deg, #6043b4, #a05d85)",
     },
     projectList: {
       listStyle: "none",
@@ -214,14 +207,6 @@ function AdminPage() {
         />
         <input
           style={styles.input}
-          placeholder="Status"
-          value={newProject.status}
-          onChange={(e) =>
-            setNewProject({ ...newProject, status: e.target.value })
-          }
-        />
-        <input
-          style={styles.input}
           placeholder="Team"
           value={newProject.team}
           onChange={(e) =>
@@ -236,7 +221,7 @@ function AdminPage() {
           {projects.map((p) => (
             <li key={p.id} style={styles.projectItem}>
               <span>
-                <strong>{p.name}</strong> — {p.status} — Team: {p.team}
+                <strong>{p.name}</strong> — Team: {p.team}
               </span>
               <button
                 style={styles.deleteBtn}
