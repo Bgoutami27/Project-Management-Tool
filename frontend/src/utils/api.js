@@ -1,7 +1,7 @@
-import axios from 'axios';
+import axios from "axios";
 
 const API = axios.create({
-  baseURL: process.env.REACT_APP_API_URL + '/api', // make sure no trailing slash in .env
+  baseURL: `${process.env.REACT_APP_API_URL}/api`, // ensure no trailing slash
 });
 
 export default API;
