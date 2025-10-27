@@ -15,6 +15,13 @@ function App() {
     setRole(localStorage.getItem("role"));
   }, []);
 
+  useEffect(() => {
+    document.body.style.background = "linear-gradient(135deg, #e0c3fc, #8ec5fc)";
+    document.body.style.minHeight = "100vh";
+    document.body.style.margin = "0";
+    document.body.style.fontFamily = "Arial, sans-serif";
+  }, []);
+  
   return (
    <div style={{ padding: "20px" }}>
       <h1
